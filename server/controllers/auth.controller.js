@@ -1,6 +1,7 @@
 import User from '../models/user.model.js';
 import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
+import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res, next) => {
 
@@ -32,3 +33,50 @@ export const signup = async (req, res, next) => {
     next(err);
   }
 };
+
+export const signin = async (req ,res, next) => {
+
+  const {email, password} = req.body;
+
+  try{
+
+    //check for  the given email is correct
+
+    const validUser = await User.findOne({email});
+
+    if(!validUser){
+       console.log("Email is not correct");
+       return next(errorHandler(404 , "User is not found"));
+    }
+
+    //Now check for the password
+
+    const validPassword = bcryptjs.compareSync(password , validUser.password);
+
+    if(!validPassword){
+      console.log("Password is incorrect");
+      return next(errorHandler(401, "Wrong credentials"));
+    }
+
+    const token = jwt.sign({id: validUser._id} , process.env.JWT_SECRET);
+
+
+    //we doesnt want the password to send as a response in validUser so we do following thing
+    const {password : pass,  ...rest} =  validUser._doc;
+
+
+    res.cookie('access_token' , token , {httpOnly: true}).status(200).json({
+      success: true,
+      rest,
+    })
+
+
+
+
+
+  }catch(err){
+
+   next(err);
+  }
+
+}

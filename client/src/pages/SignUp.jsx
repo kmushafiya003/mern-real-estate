@@ -59,8 +59,6 @@ const SignUp = () => {
         setError(err);
     }
 
-  
-
    
 
   }
