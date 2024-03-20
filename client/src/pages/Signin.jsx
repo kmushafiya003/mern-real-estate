@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { signInStart } from '../redux/user/userSlice';
 import { signInSuccess } from '../redux/user/userSlice';
 import { signInFailure } from '../redux/user/userSlice';
+import OAuth from '../components/OAuth';
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -80,6 +81,8 @@ const Signin = () => {
         >
           {loading ? 'Loading...' : 'Sign In'}
         </button>
+
+        <OAuth />
       </form>
 
       <div className="flex gap-x-2 mt-5">
