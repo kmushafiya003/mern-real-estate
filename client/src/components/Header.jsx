@@ -1,8 +1,11 @@
 import React from 'react';
 import { ImSearch } from 'react-icons/im';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
+  const {user } = useSelector((state) => state.user);
+
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl  mx-auto p-3">
@@ -27,20 +30,24 @@ const Header = () => {
 
         {/* -------- navlinks ------------------ */}
         <ul className="flex items-center gap-x-6">
-            <Link to="/">
-          <li className="hidden sm:inline text-slate-700 hover:underline transition-all duration-500">
-            Home
-          </li>
+          <Link to="/">
+            <li className="hidden sm:inline text-slate-700 hover:underline transition-all duration-500">
+              Home
+            </li>
           </Link>
-          <Link to='/about'>
-          <li className="hidden sm:inline text-slate-700 hover:underline transition-all duration-500">
-           About
-          </li>
+          <Link to="/about">
+            <li className="hidden sm:inline text-slate-700 hover:underline transition-all duration-500">
+              About
+            </li>
           </Link>
-          <Link to="/sign-in">
-          <li className=" text-slate-700 hover:underline transition-all duration-500">
-           Sign in
-          </li>
+          <Link to="/profile">
+            {user.currentUser ? (
+              <img src={user.currentUser.avatar} alt="profile" className='rounded-full h-7 w-7 sm:h-9 sm:w-9 object-cover ' />
+            ) : (
+              <li className=" text-slate-700 hover:underline transition-all duration-500">
+                Sign in
+              </li>
+            )}
           </Link>
         </ul>
       </div>
